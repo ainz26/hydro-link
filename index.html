@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Redirecionando para Hydro</title>
+  <script>
+    window.onload = function () {
+      var userAgent = navigator.userAgent  navigator.vendor  window.opera;
+      if (/android/i.test(userAgent)) {
+        window.location.href = "https://play.google.com/store/apps/details?id=com.northpark.drinkwater";
+      } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+        window.location.href = "https://apps.apple.com/br/app/hydro-beba-%C3%A1gua/id1041911171";
+      } else {
+        window.location.href = "https://www.google.com/search?q=Hydro+Beba+Água+app";
+      }
+    };
+  </script>
+</head>
+<body>
+  <p>Redirecionando para o app Hydro – Beba Água...</p>
+</body>
+</html>
