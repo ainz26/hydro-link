@@ -1,5 +1,4 @@
-
-</html><!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
@@ -11,28 +10,33 @@
       const isAndroid = /android/i.test(userAgent);
       const isIOS = /iPad|iPhone|iPod/i.test(userAgent) && !window.MSStream;
       
-      // Tempo de espera antes de redirecionar para loja (300ms)
-      const fallbackDelay = 300;
-
       // Android
       if (isAndroid) {
-        // 1. Tentativa: Intent com package name
+        // Tentativa 1: Intent direto
         window.location.href = "intent://open#Intent;package=com.vgfit.waterbalance;scheme=waterbalance;end";
         
-        // 2. Fallback para Play Store
+        // Tentativa 2: Fallback após 250ms
         setTimeout(() => {
           window.location.href = "https://play.google.com/store/apps/details?id=com.vgfit.waterbalance";
-        }, fallbackDelay);
+        }, 250);
       }
-      // iOS
+      // iOS - Abordagem mais robusta
       else if (isIOS) {
-        // 1. Tentativa: URL Scheme (pode ser waterbalance:// ou outro)
-        window.location.href = "waterbalance://";
+        // Tentativa 1: URL Scheme com iframe (funciona melhor no iOS)
+        const iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        iframe.src = 'waterbalance://';
+        document.body.appendChild(iframe);
         
-        // 2. Tentativa: Universal Link (se configurado pelo app)
+        // Tentativa 2: Universal Link após delay
         setTimeout(() => {
           window.location.href = "https://apps.apple.com/br/app/agua-reminder-beba-%C3%A1gua/id1221965482";
-        }, fallbackDelay);
+        }, 500);
+        
+        // Tentativa 3: Fallback final
+        setTimeout(() => {
+          window.location.href = "https://apps.apple.com/br/app/agua-reminder-beba-%C3%A1gua/id1221965482";
+        }, 2000);
       }
       // Outros dispositivos
       else {
@@ -40,20 +44,16 @@
       }
     }
 
-    // Inicia o redirecionamento quando a página carrega
-    window.onload = redirectToApp;
+    // Inicia imediatamente
+    document.addEventListener('DOMContentLoaded', redirectToApp);
   </script>
 </head>
 <body>
-  <p>Redirecionando para o Água Reminder - Beba Água...</p>
-  
-  <!-- Fallback manual caso o JavaScript falhe -->
-  <noscript>
-    <p>Por favor, escolha sua plataforma:</p>
-    <ul>
-      <li><a href="https://play.google.com/store/apps/details?id=com.vgfit.waterbalance">Android</a></li>
-      <li><a href="https://apps.apple.com/br/app/agua-reminder-beba-%C3%A1gua/id1221965482">iPhone/iPad</a></li>
-    </ul>
-  </noscript>
+  <p>Redirecionando para o aplicativo Água Reminder...</p>
+  <p>Se o redirecionamento não funcionar automaticamente:</p>
+  <ul>
+    <li><a href="https://play.google.com/store/apps/details?id=com.vgfit.waterbalance">Android: Instalar aplicativo</a></li>
+    <li><a href="https://apps.apple.com/br/app/agua-reminder-beba-%C3%A1gua/id1221965482">iPhone/iPad: Instalar aplicativo</a></li>
+  </ul>
 </body>
 </html>
