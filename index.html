@@ -4,13 +4,31 @@
   <meta charset="UTF-8">
   <title>Redirecionando para Hydro</title>
   <script>
-    window.onload = function () {
-      var userAgent = navigator.userAgent  navigator.vendor  window.opera;
+    window.onload = function() {
+      const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+      
+      // Android
       if (/android/i.test(userAgent)) {
-        window.location.href = "https://play.google.com/store/apps/details?id=com.northpark.drinkwater";
-      } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-        window.location.href = "https://apps.apple.com/br/app/hydro-beba-%C3%A1gua/id1041911171";
-      } else {
+        // Primeiro tenta abrir o app diretamente
+        window.location.href = "intent://open#Intent;package=com.northpark.drinkwater;scheme=hydro;end";
+        
+        // Se não abrir, redireciona para Play Store após 300ms
+        setTimeout(function() {
+          window.location.href = "https://play.google.com/store/apps/details?id=com.northpark.drinkwater";
+        }, 300);
+      }
+      // iOS
+      else if (/iPad|iPhone|iPod/i.test(userAgent) && !window.MSStream) {
+        // Primeiro tenta abrir com URL scheme
+        window.location.href = "hydro://";
+        
+        // Se não abrir, redireciona para App Store após 300ms
+        setTimeout(function() {
+          window.location.href = "https://apps.apple.com/br/app/hydro-beba-%C3%A1gua/id1041911171";
+        }, 300);
+      }
+      // Outros dispositivos
+      else {
         window.location.href = "https://www.google.com/search?q=Hydro+Beba+Água+app";
       }
     };
