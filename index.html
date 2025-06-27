@@ -1,40 +1,59 @@
-<!DOCTYPE html>
+
+</html><!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Redirecionando para Hydro</title>
+  <title>Redirecionando para Água Reminder</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>
-    window.onload = function() {
-      const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+    function redirectToApp() {
+      const userAgent = navigator.userAgent  navigator.vendor  window.opera;
+      const isAndroid = /android/i.test(userAgent);
+      const isIOS = /iPad|iPhone|iPod/i.test(userAgent) && !window.MSStream;
       
+      // Tempo de espera antes de redirecionar para loja (300ms)
+      const fallbackDelay = 300;
+
       // Android
-      if (/android/i.test(userAgent)) {
-        // Primeiro tenta abrir o app diretamente
-        window.location.href = "intent://open#Intent;package=com.northpark.drinkwater;scheme=hydro;end";
+      if (isAndroid) {
+        // 1. Tentativa: Intent com package name
+        window.location.href = "intent://open#Intent;package=com.vgfit.waterbalance;scheme=waterbalance;end";
         
-        // Se não abrir, redireciona para Play Store após 300ms
-        setTimeout(function() {
-          window.location.href = "https://play.google.com/store/apps/details?id=com.northpark.drinkwater";
-        }, 300);
+        // 2. Fallback para Play Store
+        setTimeout(() => {
+          window.location.href = "https://play.google.com/store/apps/details?id=com.vgfit.waterbalance";
+        }, fallbackDelay);
       }
       // iOS
-      else if (/iPad|iPhone|iPod/i.test(userAgent) && !window.MSStream) {
-        // Primeiro tenta abrir com URL scheme
-        window.location.href = "hydro://";
+      else if (isIOS) {
+        // 1. Tentativa: URL Scheme (pode ser waterbalance:// ou outro)
+        window.location.href = "waterbalance://";
         
-        // Se não abrir, redireciona para App Store após 300ms
-        setTimeout(function() {
-          window.location.href = "https://apps.apple.com/br/app/hydro-beba-%C3%A1gua/id1041911171";
-        }, 300);
+        // 2. Tentativa: Universal Link (se configurado pelo app)
+        setTimeout(() => {
+          window.location.href = "https://apps.apple.com/br/app/agua-reminder-beba-%C3%A1gua/id1221965482";
+        }, fallbackDelay);
       }
       // Outros dispositivos
       else {
-        window.location.href = "https://www.google.com/search?q=Hydro+Beba+Água+app";
+        window.location.href = "https://www.google.com/search?q=Água+Reminder+Beba+Água+app";
       }
-    };
+    }
+
+    // Inicia o redirecionamento quando a página carrega
+    window.onload = redirectToApp;
   </script>
 </head>
 <body>
-  <p>Redirecionando para o app Hydro – Beba Água...</p>
+  <p>Redirecionando para o Água Reminder - Beba Água...</p>
+  
+  <!-- Fallback manual caso o JavaScript falhe -->
+  <noscript>
+    <p>Por favor, escolha sua plataforma:</p>
+    <ul>
+      <li><a href="https://play.google.com/store/apps/details?id=com.vgfit.waterbalance">Android</a></li>
+      <li><a href="https://apps.apple.com/br/app/agua-reminder-beba-%C3%A1gua/id1221965482">iPhone/iPad</a></li>
+    </ul>
+  </noscript>
 </body>
 </html>
